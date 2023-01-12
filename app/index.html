@@ -1,0 +1,46 @@
+<html>
+
+<head>
+    <script type="text/javascript" src="bundle.js"></script>
+
+</head>
+
+<body>
+    <p id="name"></p>
+    <p id="id"></p>
+    <p id="location"></p>
+</body>
+
+
+<script type="text/javascript">
+    async function Init() {
+        let cdaClient = ninetailed.contentfulClient();
+        let profile, pageUserID;
+        let instance = ninetailed.createInstance('9b2564dc-d607-4761-b252-47fbdbc0be20', 'development');
+        ninetailed.identify('e240db93-b1a5-44f9-b9d0-4b6bf9efebc6', { firstname: "Muhammad Faisal Siddique" });
+        instance.page().then(data => {
+            pageUserID = data.payload.userId;
+        });
+        let homeBannerEntry = await cdaClient.getEntry('6WSYZCYswu2uvfbWG0oOIa'); // Get Banner by ID
+        let experiments = await ninetailed.getExperiments(cdaClient);
+        const experiences = ninetailed.experiencesMap(homeBannerEntry.fields.nt_experiences);
+        instance.onProfileChange((profileState) => {
+            profile = profileState.profile;
+            debugger;
+            if (profile) {
+                document.getElementById("id").innerText = profile.id;
+                document.getElementById("name").innerText = profile.traits.firstname;
+                document.getElementById("location").innerText = profile.location.city + "," + profile.location.countryCode + "," + profile.location.postalCode;
+            }
+        });
+        let selectActiveExperiments = ninetailed.activeExperiments(experiments, profile);
+        const experience = ninetailed.experienceSelect(experiences, selectActiveExperiments, profile);
+        const audience = experience.audience;
+        const variant = ninetailed.experienceVariantSelect(homeBannerEntry.fields, experience, profile);
+        // <p ng-hide="loading">{{variant.text}}</p>
+    }
+
+    Init();
+</script>
+
+</html>

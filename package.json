@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@ninetailed/experience.js": "^2.2.8",
+    "@ninetailed/experience.js-utils": "^2.2.8",
+    "@ninetailed/experience.js-utils-contentful": "^2.2.8",
+    "contentful": "^9.2.11"
+  }
+}
